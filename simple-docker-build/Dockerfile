@@ -5,6 +5,8 @@ RUN yum install -y nginx && \
     echo "daemon off;" >> /etc/nginx/nginx.conf && \
     sed -i 's!error_log.*!error_log /dev/stderr;!' /etc/nginx/nginx.conf && \
     sed -i 's!access_log.*!access_log /dev/stdout main;!' /etc/nginx/nginx.conf && \
+    sed -i 's/user nginx;//' /etc/nginx/nginx.conf  && \
+    sed -i 's!pid /run/nginx.pid;!pid /tmp/nginx.pid;!' /etc/nginx/nginx.conf  && \
     yum -y clean all --enablerepo='*'
 
 ENTRYPOINT ["nginx"]
