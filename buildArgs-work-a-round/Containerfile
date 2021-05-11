@@ -1,0 +1,21 @@
+FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
+
+# https://docs.docker.com/engine/reference/builder/
+ARG VERSION=latest
+ARG USERNAME
+ARG PASSWORD
+ENV MY_APP_CONFIG=foo
+
+
+RUN echo "buildArgs demo: VERSION=${VERSION} USERNAME=${USERNAME} PASSWORD=${PASSWORD} MY_APP_CONFIG=${MY_APP_CONFIG}"
+
+
+FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
+
+ARG VERSION=latest
+ARG USERNAME
+ARG PASSWORD
+ENV MY_APP_CONFIG=foo
+
+CMD ["/bin/bash","-c","echo VERSION=${VERSION} USERNAME=${USERNAME} PASSWORD=${PASSWORD} MY_APP_CONFIG=${MY_APP_CONFIG}; sleep infinity"]
+
