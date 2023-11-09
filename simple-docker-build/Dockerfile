@@ -1,5 +1,7 @@
 FROM registry.access.redhat.com/ubi8/ubi
-
+RUN whoami
+RUN id
+RUN $USER
 RUN yum install -y nginx && \
     sed -i 's/80 default_server/8080 default_server/' /etc/nginx/nginx.conf && \
     echo "daemon off;" >> /etc/nginx/nginx.conf && \
