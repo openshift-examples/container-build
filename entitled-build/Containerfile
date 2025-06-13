@@ -1,21 +1,12 @@
-FROM registry.access.redhat.com/ubi8/ubi:latest
+FROM registry.access.redhat.com/ubi9/ubi:latest
+
 USER root
-# Copy entitlements
-COPY ./etc-pki-entitlement /etc/pki/entitlement
-# Copy subscription manager configurations
-COPY ./rhsm-conf /etc/rhsm
-COPY ./rhsm-ca /etc/rhsm/ca
-# Delete /etc/rhsm-host to use entitlements from the build container
-RUN rm /etc/rhsm-host && \
-    # Initialize /etc/yum.repos.d/redhat.repo
-    # See https://access.redhat.com/solutions/1443553
-    yum repolist --disablerepo=* && \
-    subscription-manager repos --enable <enabled-repo> && \
-    yum -y update && \
+
+RUN yum -y update && \
     yum -y install file binutils pam-devel numactl-devel libaio-devel git gcc && \
-    # Remove entitlements and Subscription Manager configs
-    rm -rf /etc/pki/entitlement && \
-    rm -rf /etc/rhsm
+    && dnf clean all \
+  	&& rm -rf /var/cache/yum
+
 # OpenShift requires images to run as non-root by default
 USER 1001
 ENTRYPOINT ["/bin/bash"]
